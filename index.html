@@ -123,42 +123,42 @@
     <script>
         const algorithmData = {
             'Bubble Sort': {
-                idea: 'Compara elementos vizinhos (adjacentes) e os troca de lugar se o da esquerda for maior. Repete o processo, "empurrando" os maiores para o final a cada passagem.',
+                idea: 'Exemplo: [5, 1]. Compara 5 com 1. Como 5 > 1, eles trocam de lugar, resultando em [1, 5]. O algoritmo continua fazendo essas comparações par a par, "empurrando" os maiores para o final a cada passagem completa.',
                 complexity: 'O(n²)',
                 space: 'O(1)',
                 stability: 'Sim',
                 usecase: 'Apenas didático'
             },
             'Selection Sort': {
-                idea: 'Varre a lista para encontrar o índice do menor elemento. Ao final da varredura, troca esse menor com o elemento que está no início da parte não ordenada.',
+                idea: 'Exemplo: [5, 1, 4]. O algoritmo varre a lista inteira e descobre que 1 é o menor. Então, ele troca o 1 com o 5 (o primeiro elemento). A lista fica [1, 5, 4]. Na próxima passagem, ele ignora o 1 e repete o processo.',
                 complexity: 'O(n²)',
                 space: 'O(1)',
                 stability: 'Não',
                 usecase: 'Custo de escrita alto'
             },
             'Insertion Sort': {
-                idea: 'Pega um elemento (chave) e o compara com os da sub-lista ordenada à esquerda, deslocando os maiores para a direita até encontrar a posição correta para inserir a chave.',
+                idea: 'Exemplo: [5, 1, 4]. Pega o 1. Compara com 5. Como 1 < 5, o 5 é deslocado para a direita. O 1 é inserido no espaço aberto, ficando [1, 5, 4]. Depois, pega o 4. Compara com 5 (desloca), compara com 1 (para), e insere o 4.',
                 complexity: 'O(n²)',
                 space: 'O(1)',
                 stability: 'Sim',
                 usecase: 'Listas pequenas ou quase ordenadas'
             },
             'Merge Sort': {
-                idea: 'Divide o vetor ao meio recursivamente e depois combina (intercala) os sub-vetores, comparando o primeiro elemento de cada um e movendo o menor para o vetor auxiliar.',
+                idea: 'Exemplo: [5, 1, 4, 8]. Divide em [5, 1] e [4, 8]. Divide de novo em [5], [1] e [4], [8]. Agora, intercala: [1, 5] e [4, 8]. Finalmente, intercala as duas metades: compara 1 com 4 (pega 1), 5 com 4 (pega 4), 5 com 8 (pega 5), e pega o 8.',
                 complexity: 'O(n log n)',
                 space: 'O(n)',
                 stability: 'Sim',
                 usecase: 'Estabilidade e tempo garantido'
             },
             'Quick Sort': {
-                idea: 'Escolhe um "pivô". Compara cada elemento com o pivô e os troca de lado para particionar o vetor, colocando menores à esquerda e maiores à direita.',
+                idea: 'Exemplo: [5, 1, 7, 4] com pivô=4. Compara 5 com 4 (5>4). Compara 1 com 4 (1<4, troca com 5). Compara 7 com 4 (7>4). Ao final, o vetor é particionado em [1, 4, 7, 5], com os menores antes do 4.',
                 complexity: 'O(n log n)',
                 space: 'O(log n)',
                 stability: 'Não',
                 usecase: 'Ordenação geral em memória'
             },
             'Heap Sort': {
-                idea: 'Transforma o vetor em uma estrutura Max-Heap. Troca a raiz (maior elemento) com o último, diminui o heap e reconstrói a propriedade de heap.',
+                idea: 'Exemplo: [4, 1, 7]. Transforma em Max-Heap: [7, 1, 4]. Troca a raiz (7) com o último (4) -> [4, 1, 7]. Agora, considera o heap como [4, 1], reconstrói para [4, 1] e repete o processo.',
                 complexity: 'O(n log n)',
                 space: 'O(1)',
                 stability: 'Não',
