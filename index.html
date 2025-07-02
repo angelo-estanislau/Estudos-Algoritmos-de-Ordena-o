@@ -9,12 +9,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- 
-    Chosen Palette: Calm Harmony (Slate, Cyan)
-    Application Structure Plan: A dashboard-style SPA. A top control panel allows users to select a sorting algorithm and a dataset type (Best, Worst, Random). The main area dynamically updates, showing: 1) A 'Visão Geral' card with theoretical data (complexity, stability) for the chosen algorithm. 2) An 'Análise de Execução' section with performance metrics (comparisons, swaps) and a bar chart comparing the selected algorithm's performance against all others for the current dataset. This structure promotes active learning and comparison over passive reading.
-    Visualization & Content Choices: Theoretical data is shown in clean cards for easy reference. Key performance metrics (comparisons/swaps) are presented in a dynamic bar chart (Chart.js), which is the most effective way to visually compare discrete quantities across different algorithms, making performance differences instantly clear. The interactivity of selecting algorithms and datasets and seeing the chart and stats update immediately turns the static source documents into a powerful learning tool.
-    CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
-    -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -43,7 +37,6 @@
         </header>
 
         <main>
-            <!-- Control Panel -->
             <section class="bg-white p-6 rounded-xl shadow-md mb-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -70,12 +63,10 @@
                 </div>
             </section>
 
-            <!-- Dynamic Content Area -->
             <section id="content-area">
-                <!-- Algorithm Overview Card -->
                 <div class="bg-white p-6 rounded-xl shadow-md mb-8">
                     <h2 id="overview-title" class="text-2xl font-bold text-slate-900 mb-4">Visão Geral: Bubble Sort</h2>
-                    <p id="overview-idea" class="mb-4 text-slate-600"></p>
+                    <div id="overview-idea" class="mb-4 text-slate-600 text-lg leading-relaxed"></div>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                         <div>
                             <p class="text-sm text-slate-500">Complexidade (Médio)</p>
@@ -96,7 +87,6 @@
                     </div>
                 </div>
 
-                <!-- Execution Analysis -->
                 <div class="bg-white p-6 rounded-xl shadow-md">
                      <h2 class="text-2xl font-bold text-slate-900 mb-2">Análise de Execução</h2>
                      <p class="text-slate-600 mb-6">Comparação da performance dos algoritmos para o cenário de dados selecionado.</p>
@@ -123,42 +113,60 @@
     <script>
         const algorithmData = {
             'Bubble Sort': {
-                idea: 'Exemplo: [5, 1]. Compara 5 com 1. Como 5 > 1, eles trocam de lugar, resultando em [1, 5]. O algoritmo continua fazendo essas comparações par a par, "empurrando" os maiores para o final a cada passagem completa.',
+                idea: `O algoritmo percorre o vetor várias vezes. Em cada passagem, ele compara elementos vizinhos e os troca se estiverem fora de ordem, fazendo com que o maior elemento da seção "borbulhe" para sua posição final.<br><br>
+                       <strong>Exemplo:</strong> [8, 3, 5, 1]<br>
+                       &nbsp;&nbsp;&nbsp;&bull; <strong>Comparação:</strong> O algoritmo compara 8 com 3. Como 8 > 3, eles trocam.<br>
+                       &nbsp;&nbsp;&nbsp;&bull; <strong>Troca:</strong> O vetor torna-se [3, 8, 5, 1]. O processo continua, comparando 8 com 5 (troca), e depois 8 com 1 (troca), levando o 8 para o final na primeira passagem.`,
                 complexity: 'O(n²)',
                 space: 'O(1)',
                 stability: 'Sim',
                 usecase: 'Apenas didático'
             },
             'Selection Sort': {
-                idea: 'Exemplo: [5, 1, 4]. O algoritmo varre a lista inteira e descobre que 1 é o menor. Então, ele troca o 1 com o 5 (o primeiro elemento). A lista fica [1, 5, 4]. Na próxima passagem, ele ignora o 1 e repete o processo.',
+                idea: `Divide o vetor em duas partes: ordenada e não ordenada. A cada passagem, ele varre toda a parte não ordenada para encontrar o menor elemento.<br><br>
+                       <strong>Exemplo:</strong> [8, 3, 5, 1]<br>
+                       &nbsp;&nbsp;&nbsp;&bull; <strong>Comparação:</strong> Varre a lista toda [8, 3, 5, 1] e determina que 1 é o menor elemento.<br>
+                       &nbsp;&nbsp;&nbsp;&bull; <strong>Troca:</strong> O 1 é trocado com o primeiro elemento, 8. O vetor torna-se [1, 3, 5, 8]. A primeira posição está agora ordenada.`,
                 complexity: 'O(n²)',
                 space: 'O(1)',
                 stability: 'Não',
                 usecase: 'Custo de escrita alto'
             },
             'Insertion Sort': {
-                idea: 'Exemplo: [5, 1, 4]. Pega o 1. Compara com 5. Como 1 < 5, o 5 é deslocado para a direita. O 1 é inserido no espaço aberto, ficando [1, 5, 4]. Depois, pega o 4. Compara com 5 (desloca), compara com 1 (para), e insere o 4.',
+                idea: `Funciona como ao organizar cartas de baralho. Pega um elemento (a "chave") da parte não ordenada e o insere na posição correta da parte ordenada (à esquerda).<br><br>
+                       <strong>Exemplo:</strong> [8, 3, 5, 1] &rarr; A parte ordenada é [8]. Pega-se o 3.<br>
+                       &nbsp;&nbsp;&nbsp;&bull; <strong>Comparação:</strong> Compara o 3 com o 8.<br>
+                       &nbsp;&nbsp;&nbsp;&bull; <strong>Movimentação:</strong> Como 3 < 8, o 8 é deslocado para a direita e o 3 é inserido. O vetor fica [3, 8, 5, 1].`,
                 complexity: 'O(n²)',
                 space: 'O(1)',
                 stability: 'Sim',
                 usecase: 'Listas pequenas ou quase ordenadas'
             },
             'Merge Sort': {
-                idea: 'Exemplo: [5, 1, 4, 8]. Divide em [5, 1] e [4, 8]. Divide de novo em [5], [1] e [4], [8]. Agora, intercala: [1, 5] e [4, 8]. Finalmente, intercala as duas metades: compara 1 com 4 (pega 1), 5 com 4 (pega 4), 5 com 8 (pega 5), e pega o 8.',
+                idea: `Usa "Dividir para Conquistar". Divide o vetor recursivamente ao meio até ter sub-vetores de um elemento. Depois, combina (intercala) os sub-vetores de forma ordenada.<br><br>
+                       <strong>Exemplo:</strong> Intercalando [1, 8] e [3, 5]<br>
+                       &nbsp;&nbsp;&nbsp;&bull; <strong>Comparação:</strong> Compara o primeiro de cada metade (1 com 3).<br>
+                       &nbsp;&nbsp;&nbsp;&bull; <strong>Movimentação:</strong> O menor (1) é movido para o vetor final. O processo repete-se (8 com 3), movendo o 3, e assim por diante.`,
                 complexity: 'O(n log n)',
                 space: 'O(n)',
                 stability: 'Sim',
                 usecase: 'Estabilidade e tempo garantido'
             },
             'Quick Sort': {
-                idea: 'Exemplo: [5, 1, 7, 4] com pivô=4. Compara 5 com 4 (5>4). Compara 1 com 4 (1<4, troca com 5). Compara 7 com 4 (7>4). Ao final, o vetor é particionado em [1, 4, 7, 5], com os menores antes do 4.',
+                idea: `Usa "Dividir para Conquistar". Escolhe um elemento como "pivô" e particiona o vetor, colocando todos os menores que o pivô à sua esquerda e os maiores à sua direita.<br><br>
+                       <strong>Exemplo:</strong> [7, 2, 1, 6, 8, 5] com pivô=5<br>
+                       &nbsp;&nbsp;&nbsp;&bull; <strong>Comparação:</strong> Cada elemento é comparado com o pivô 5.<br>
+                       &nbsp;&nbsp;&nbsp;&bull; <strong>Troca:</strong> Elementos < 5 (2, 1) são movidos para a esquerda, e os > 5 (7, 6, 8) para a direita. O resultado pode ser [2, 1, 5, 6, 8, 7].`,
                 complexity: 'O(n log n)',
                 space: 'O(log n)',
                 stability: 'Não',
                 usecase: 'Ordenação geral em memória'
             },
             'Heap Sort': {
-                idea: 'Exemplo: [4, 1, 7]. Transforma em Max-Heap: [7, 1, 4]. Troca a raiz (7) com o último (4) -> [4, 1, 7]. Agora, considera o heap como [4, 1], reconstrói para [4, 1] e repete o processo.',
+                idea: `Usa a estrutura de dados Heap. Primeiro, transforma o vetor em um Max-Heap, onde o maior elemento é sempre a raiz (topo).<br><br>
+                       <strong>Exemplo:</strong> [4, 10, 3, 5, 1] é transformado em Max-Heap: [10, 5, 3, 4, 1].<br>
+                       &nbsp;&nbsp;&nbsp;&bull; <strong>Comparação:</strong> A propriedade de heap (pai > filhos) é verificada e mantida.<br>
+                       &nbsp;&nbsp;&nbsp;&bull; <strong>Troca:</strong> A raiz (10) é trocada com o último (1). O heap é reconstruído sem o 10, e o processo se repete.`,
                 complexity: 'O(n log n)',
                 space: 'O(1)',
                 stability: 'Não',
@@ -386,7 +394,7 @@
         function updateOverview(algoName) {
             const data = algorithmData[algoName];
             overviewTitle.textContent = `Visão Geral: ${algoName}`;
-            overviewIdea.textContent = data.idea;
+            overviewIdea.innerHTML = data.idea; // Use innerHTML to render the <strong> and <br> tags
             overviewComplexity.textContent = data.complexity;
             overviewSpace.textContent = data.space;
             overviewStability.textContent = data.stability;
