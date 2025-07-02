@@ -60,9 +60,11 @@
                     <div>
                         <label for="dataset-select" class="block mb-2 font-semibold text-slate-700">2. Escolha um Cenário de Dados:</label>
                         <select id="dataset-select" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition">
-                            <option value="best">Melhor Caso (Já Ordenado)</option>
-                            <option value="worst">Pior Caso (Ordem Inversa)</option>
-                            <option value="random">Caso Aleatório</option>
+                            <option value="best">Melhor Caso (Vetor Ordenado)</option>
+                            <option value="worst">Pior Caso (Vetor Inverso)</option>
+                            <option value="random">Caso Aleatório (Exemplo)</option>
+                            <option value="exercise_a">Exercício A: [15, 27, 2...]</option>
+                            <option value="exercise_b">Exercício B: [2, 4, 6, 8...]</option>
                         </select>
                     </div>
                 </div>
@@ -121,42 +123,42 @@
     <script>
         const algorithmData = {
             'Bubble Sort': {
-                idea: 'Compara pares de elementos vizinhos e os troca se estiverem fora de ordem. A cada passagem, o maior elemento "borbulha" para o final.',
+                idea: 'Compara elementos vizinhos (adjacentes) e os troca de lugar se o da esquerda for maior. Repete o processo, "empurrando" os maiores para o final a cada passagem.',
                 complexity: 'O(n²)',
                 space: 'O(1)',
                 stability: 'Sim',
                 usecase: 'Apenas didático'
             },
             'Selection Sort': {
-                idea: 'A cada passagem, encontra o menor elemento da parte não ordenada e o troca com o primeiro elemento dessa parte.',
+                idea: 'Varre a lista para encontrar o índice do menor elemento. Ao final da varredura, troca esse menor com o elemento que está no início da parte não ordenada.',
                 complexity: 'O(n²)',
                 space: 'O(1)',
                 stability: 'Não',
                 usecase: 'Custo de escrita alto'
             },
             'Insertion Sort': {
-                idea: 'Percorre o vetor, inserindo cada elemento em sua posição correta dentro da sub-lista já ordenada à esquerda.',
+                idea: 'Pega um elemento (chave) e o compara com os da sub-lista ordenada à esquerda, deslocando os maiores para a direita até encontrar a posição correta para inserir a chave.',
                 complexity: 'O(n²)',
                 space: 'O(1)',
                 stability: 'Sim',
                 usecase: 'Listas pequenas ou quase ordenadas'
             },
             'Merge Sort': {
-                idea: 'Divide o vetor ao meio recursivamente e depois combina (intercala) os sub-vetores de forma ordenada.',
+                idea: 'Divide o vetor ao meio recursivamente e depois combina (intercala) os sub-vetores, comparando o primeiro elemento de cada um e movendo o menor para o vetor auxiliar.',
                 complexity: 'O(n log n)',
                 space: 'O(n)',
                 stability: 'Sim',
                 usecase: 'Estabilidade e tempo garantido'
             },
             'Quick Sort': {
-                idea: 'Escolhe um "pivô" e particiona o vetor, movendo elementos menores para a esquerda e maiores para a direita.',
+                idea: 'Escolhe um "pivô". Compara cada elemento com o pivô e os troca de lado para particionar o vetor, colocando menores à esquerda e maiores à direita.',
                 complexity: 'O(n log n)',
                 space: 'O(log n)',
                 stability: 'Não',
                 usecase: 'Ordenação geral em memória'
             },
             'Heap Sort': {
-                idea: 'Transforma o vetor em uma estrutura Max-Heap e extrai repetidamente o maior elemento, colocando-o no final.',
+                idea: 'Transforma o vetor em uma estrutura Max-Heap. Troca a raiz (maior elemento) com o último, diminui o heap e reconstrói a propriedade de heap.',
                 complexity: 'O(n log n)',
                 space: 'O(1)',
                 stability: 'Não',
@@ -166,8 +168,10 @@
 
         const datasets = {
             best: [1, 4, 7, 9, 14, 17],
-            worst: [17, 14, 9, 7, 4, 1],
-            random: [15, 27, 2, 18, 11, 6]
+            worst: [21, 19, 17, 9, 5, 1],
+            random: [9, 3, 25, 1, 18, 12],
+            exercise_a: [15, 27, 2, 18, 11, 6],
+            exercise_b: [2, 4, 6, 8, 10, 12, 11, 9, 7, 5, 3, 1]
         };
 
         // --- Sorting Algorithm Implementations ---
@@ -213,16 +217,18 @@
         function insertionSort(arr) {
             let n = arr.length;
             let comparisons = 0;
-            let swaps = 0; // Here swaps represents movements
+            let swaps = 0;
             for (let i = 1; i < n; i++) {
                 let key = arr[i];
                 let j = i - 1;
+                let comparedInLoop = false;
                 while (j >= 0 && (comparisons++, arr[j] > key)) {
                     arr[j + 1] = arr[j];
                     swaps++;
                     j = j - 1;
+                    comparedInLoop = true;
                 }
-                if(j >= 0) comparisons++; // The final comparison that fails the while condition
+                if(j >= 0 && !comparedInLoop) comparisons++;
                 
                 arr[j + 1] = key;
             }
@@ -231,7 +237,7 @@
 
         function mergeSort(arr) {
              let comparisons = 0;
-             let swaps = 0; // Not really swaps, but represents merge operations
+             let swaps = 0;
             
              function merge(left, right) {
                 let resultArray = [], leftIndex = 0, rightIndex = 0;
@@ -246,7 +252,17 @@
                     }
                      swaps++;
                 }
-                return resultArray.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+                while (leftIndex < left.length) {
+                    resultArray.push(left[leftIndex]);
+                    leftIndex++;
+                    swaps++;
+                }
+                while (rightIndex < right.length) {
+                    resultArray.push(right[rightIndex]);
+                    rightIndex++;
+                    swaps++;
+                }
+                return resultArray;
             }
 
             function sort(arr) {
@@ -260,7 +276,7 @@
             }
             
             sort(arr);
-            return { comparisons, swaps };
+            return { comparisons, swaps: swaps > 0 ? swaps : arr.length };
         }
 
 
@@ -279,8 +295,10 @@
                         swaps++;
                     }
                 }
-                [subArr[i + 1], subArr[high]] = [subArr[high], subArr[i + 1]];
-                swaps++;
+                if(i + 1 !== high) {
+                    [subArr[i + 1], subArr[high]] = [subArr[high], subArr[i + 1]];
+                    swaps++;
+                }
                 return i + 1;
             }
 
